@@ -1,0 +1,47 @@
+import codecademylib3
+import numpy as np
+# Import pandas with alias
+import pandas as pd
+
+# Read in the census dataframe
+census = pd.read_csv('census_data.csv', index_col=0)
+
+# Printing the first five rows
+# print(census.head())
+
+# Checking the data types
+# print(census.dtypes)
+
+# Unique values of birth_year
+# print(census['birth_year'].unique())
+
+# Replacing the missing value with 1967
+census['birth_year'] = census['birth_year'].replace(['missing'], 1967)
+# print(census['birth_year'].unique())
+
+# Changing from str to int
+census['birth_year'] = census['birth_year'].astype(int)
+print(census.dtypes)
+
+# Mean of birth_year
+print(census['birth_year'].mean())
+
+# Converting higher_tax variable to category
+census['higher_tax'] = pd.Categorical(census['higher_tax'], ['strongly disagree', 'disagree', 'neutral', 'agree', 'strongly agree'], ordered=True)
+# print(census['higher_tax'].unique())
+
+census['higher_tax'] = census['higher_tax'].cat.codes
+print(census['higher_tax'].median())
+
+# census = pd.get_dummies(census, columns=['marital_status'])
+# print(census.head())
+
+# # Creating marital_codes
+census['marital_status'] = pd.Categorical(census['marital_status'], ['single', 'married', 'divorced', 'widowed'], ordered=True)
+census['marital_codes'] = census['marital_status'].cat.codes
+print(census.marital_status.unique())
+print(census.head())
+
+
+census['age_group'] = pd.Categorical(census.birth_year.apply(lambda x: str((2021 - x) - (2021 - x) % 5) + '-' + str((2021 - x)-(2021 - x) % 5 + 4)), [str(5 * i + 5) + '-' + str(5 * i + 5 + 4) for i in range(70)])
+print(census.head(10))
